@@ -6,7 +6,7 @@ import io.swagger.annotations.Api
 import org.springframework.web.bind.annotation.*
 
 
-@Api(value = "users", description = "user api v1")
+@Api(value = "users", description = "user management api v1")
 @RestController
 @RequestMapping("v1/api/users")
 class UserController(

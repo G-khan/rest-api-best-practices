@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: User Management Service
+swagger:
+  host:
+    url: localhost:8080
+    path:
+
+server:
+  port: 8080
