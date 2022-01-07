@@ -1,17 +1,18 @@
 package dev.gokhana.restapibestpractices.controller
 
+import dev.gokhana.restapibestpractices.model.BaseResponse
 import dev.gokhana.restapibestpractices.model.UserDTO
 import dev.gokhana.restapibestpractices.service.UserService
 import io.swagger.annotations.*
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 
 @Api(value = "users", description = "Rest api for User Management")
 @RestController
 @RequestMapping("v1/api/users")
-@Validated
 class UserController(
     private val userService: UserService
 ) {
@@ -24,10 +25,11 @@ class UserController(
         ]
     )
     @GetMapping(
-        name = "/{id}", produces = [MediaType.APPLICATION_JSON_VALUE]
+        path = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun retrieveUser(@PathVariable("id") id: Int): UserDTO {
-        return userService.getById(id)
+    fun retrieveUser(@PathVariable("id") id: Int): BaseResponse<UserDTO> {
+        val user = userService.getById(id)
+        return BaseResponse.success(payload = user)
     }
 
     @ApiOperation(value = "Retrieve users according to max records parameter")
@@ -41,8 +43,9 @@ class UserController(
     fun retrieveAllUsers(
         @ApiParam(value = "maxRecords", required = false, defaultValue = "5")
         @RequestParam(required = false) maxRecords: Int?
-    ): List<UserDTO> {
-        return userService.getUsers(maxRecords)
+    ): BaseResponse<List<UserDTO>> {
+        val users = userService.getUsers(maxRecords)
+        return BaseResponse.success(payload = users)
     }
 
     @ApiOperation(value = "create a user")
@@ -55,8 +58,10 @@ class UserController(
     @PostMapping(
         consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun createUser(@RequestBody userDTO: UserDTO): UserDTO {
-        return userService.createUser(userDTO)
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createUser(@Valid @RequestBody userDTO: UserDTO): BaseResponse<UserDTO> {
+        val user = userService.createUser(userDTO)
+        return BaseResponse.success(payload = user)
     }
 
     @ApiOperation(value = "update a user")
@@ -68,7 +73,7 @@ class UserController(
         ]
     )
     @PutMapping(
-        name = "/{id}", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE]
+        path = ["/{id}"], consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     fun updateUser(@PathVariable id: Int, @RequestBody userDTO: UserDTO): UserDTO {
         return userService.updateUser(id, userDTO)
@@ -83,10 +88,14 @@ class UserController(
         ]
     )
     @PatchMapping(
-        name = "/{id}", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE]
+        path = ["/{id}"], consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    fun patchUpdateUser(@PathVariable("id") id: Int, @RequestBody userDTO: UserDTO): UserDTO {
-        return userService.patchUser(id, userDTO)
+    fun patchUpdateUser(
+        @PathVariable(name = "id", required = true) id: Int,
+        @RequestBody userDTO: UserDTO
+    ): BaseResponse<UserDTO> {
+        val user = userService.patchUser(id, userDTO)
+        return BaseResponse.success(user, "Partial update is succesfully completed via patch.")
     }
 
     @ApiOperation(value = "patch a user info")
@@ -96,8 +105,9 @@ class UserController(
             ApiResponse(code = 404, message = "The resource not found")
         ]
     )
-    @DeleteMapping("/{id}")
-    fun removeUser(@PathVariable("id") id: Int, @RequestBody userDTO: UserDTO) {
-        return userService.deleteUserById(id)
+    @DeleteMapping(path = ["/{id}"])
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeUser(@PathVariable id: Int, @RequestBody userDTO: UserDTO) {
+        userService.deleteUserById(id)
     }
 }
