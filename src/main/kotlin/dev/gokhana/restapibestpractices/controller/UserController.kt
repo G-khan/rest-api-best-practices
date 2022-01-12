@@ -98,7 +98,7 @@ class UserController(
         return BaseResponse.success(user, "Partial update is succesfully completed via patch.")
     }
 
-    @ApiOperation(value = "patch a user info")
+    @ApiOperation(value = "delete a user info")
     @ApiResponses(
         value = [
             ApiResponse(code = 204, message = "No content"),
