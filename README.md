@@ -2,4 +2,14 @@
 
 Designing RESTful APIs, Best-Practices &amp; Golden Rules
 
-<img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public." />
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+Examples
+- Api Naming
+- Exception Handling
+- Versioning
+- Http status
+- Http Response Models
+- Swagger - api doc
+
+The service is a dummy service, so ignore it.
