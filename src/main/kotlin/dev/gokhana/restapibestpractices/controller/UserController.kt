@@ -107,7 +107,7 @@ class UserController(
     )
     @DeleteMapping(path = ["/{id}"])
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removeUser(@PathVariable id: Int, @RequestBody userDTO: UserDTO) {
+    fun removeUser(@PathVariable id: Int) {
         userService.deleteUserById(id)
     }
 }
