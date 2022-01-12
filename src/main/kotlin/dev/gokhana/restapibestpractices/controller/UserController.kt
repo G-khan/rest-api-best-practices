@@ -12,7 +12,7 @@ import javax.validation.Valid
 
 @Api(value = "users", description = "Rest api for User Management")
 @RestController
-@RequestMapping("v1/api/users")
+@RequestMapping("/api/v1/users")
 class UserController(
     private val userService: UserService
 ) {
